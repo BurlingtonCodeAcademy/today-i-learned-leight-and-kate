@@ -1,0 +1,31 @@
+{
+  "name": "til",
+  "version": "1.0.0",
+  "description": "Today I Learned tool",
+  "bin": {
+    "til": "til.js"
+  },
+  "scripts": {
+    "test": "npx jasmine-node --verbose spec/*.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BurlingtonCodeAcademy/til.git"
+  },
+  "keywords": [
+    "learning"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BurlingtonCodeAcademy/til/issues"
+  },
+  "homepage": "https://github.com/BurlingtonCodeAcademy/til#readme",
+  "dependencies": {
+    "moment": "^2.22.2",
+    "mongodb": "^3.1.1"
+  },
+  "devDependencies": {
+    "jasmine-node": "^1.15.0"
+  }
+}
