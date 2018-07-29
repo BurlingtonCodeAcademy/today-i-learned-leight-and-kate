@@ -7,22 +7,24 @@
 ###  To install MongoDB:
 
   * on MacOS with Homebrew, run:
-      brew update
-      brew install mongodb 
-      brew services start mongodb
+
+        brew update
+        brew install mongodb 
+        brew services start mongodb
     
-    to fix the error "Permission denied @ dir_s_mkdir - /usr/local/Frameworks", run:
-      sudo mkdir /usr/local/Frameworks
-      sudo chown $(whoami):admin /usr/local/Frameworks
+    * to fix the error "`Permission denied @ dir_s_mkdir - /usr/local/Frameworks`", run:
 
-    to watch the log, run
-      tail -f /usr/local/var/log/mongodb/mongo.log
+          sudo mkdir /usr/local/Frameworks
+          sudo chown $(whoami):admin /usr/local/Frameworks
 
-    see https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/#install-with-homebrew
+    * to watch the log, run
 
+          tail -f /usr/local/var/log/mongodb/mongo.log
 
-  * all others: 
-    see https://docs.mongodb.com/guides/server/install/
+      see https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/#install-with-homebrew
+
+  * all other systems: 
+    * see https://docs.mongodb.com/guides/server/install/
 
 
 ### To install TIL:
