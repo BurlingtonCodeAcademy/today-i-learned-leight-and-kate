@@ -18,7 +18,15 @@ const moment = require('moment');
 const url = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const dbName = 'til';
 
-start();
+let db, mongoClient;
+
+MongoClient.connect(url, { useNewUrlParser: true }, function (err, client) {
+  assert.equal(null, err);
+  // console.log("Connected successfully to database");
+  mongoClient = client;
+  db = client.db(dbName);
+  start();
+});
 
 function start() {
   // the first two args are full paths to the executable files,
@@ -33,10 +41,10 @@ function start() {
   else if (command === 'add') {
     let text = params.join(' ').trim();
     let entry = createEntry(text);
-    saveEntry(entry);
+    saveEntryAndQuit(entry);
   }
   else if (command === 'list') {
-    printEntries();
+    printEntriesAndQuit();
   }
   else {
     help();
@@ -69,17 +77,16 @@ function createEntry(text) {
 }
 
 // print all entries, in chronological order
-function printEntries() {
-  connectAnd((db, collection, finishUp) => {
-    let cursor = collection.find({}).sort([['when', 1]]);
+function printEntriesAndQuit() {
+    let cursor = db.collection('entries').find({}).sort([['when', 1]]);
     let currentDay;
     cursor.forEach((entry) => {
       currentDay = printEntry(entry, currentDay);
-    }, function (err) {
+    }, (err) => {
       assert.equal(null, err);
-      finishUp();
+      mongoClient.close()
+      process.exit();
     });
-  });
 }
 
 /*
@@ -108,29 +115,11 @@ function printEntry(entry, currentDay) {
   return currentDay;
 }
 
-// do something with the database
-// the caller must pass a callback, which we will call with the db and collection;
-// then the caller must call *another* callback to close the database connection
-function connectAnd(callback) {
-  MongoClient.connect(url, { useNewUrlParser: true }, function (err, client) {
+function saveEntryAndQuit(entry) {
+  db.collection('entries').insertOne(entry, (err, r) => {
     assert.equal(null, err);
-    // console.log("Connected successfully to database");
-
-    const db = client.db(dbName);
-    const collection = db.collection('entries');
-
-    callback(db, collection, () => {
-      client.close();
-    });
-  });
-}
-
-function saveEntry(entry) {
-  connectAnd((db, collection, finishUp) => {
-    collection.insertOne(entry, (err, r) => {
-      assert.equal(null, err);
-      assert.equal(1, r.insertedCount);
-      finishUp();
-    });
+    assert.equal(1, r.insertedCount);
+    mongoClient.close();
+    process.exit();
   });
 }
