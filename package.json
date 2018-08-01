@@ -6,6 +6,7 @@
     "til": "til.js"
   },
   "scripts": {
+    "start": "node til_web.js",
     "test": "npx jasmine-node --verbose spec/*.spec.js"
   },
   "repository": {
@@ -23,7 +24,9 @@
   "homepage": "https://github.com/BurlingtonCodeAcademy/til#readme",
   "dependencies": {
     "moment": "^2.22.2",
-    "mongodb": "^3.1.1"
+    "mongodb": "^3.1.1",
+    "mime": "^2.3.1",
+    "mime-types": "^2.1.18"
   },
   "devDependencies": {
     "jasmine-node": "^1.15.0"
