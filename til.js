@@ -108,23 +108,6 @@ function printEntry(entry, currentDay) {
   return currentDay;
 }
 
-// do something with the database
-// the caller must pass a callback, which we will call with the db and collection;
-// then the caller must call *another* callback to close the database connection
-function connectAnd(callback) {
-  MongoClient.connect(url, { useNewUrlParser: true }, function (err, client) {
-    assert.equal(null, err);
-    // console.log("Connected successfully to database");
-
-    const db = client.db(dbName);
-    const collection = db.collection('entries');
-
-    callback(db, collection, () => {
-      client.close();
-    });
-  });
-}
-
 function saveEntry(entry) {
   connectAnd((db, collection, finishUp) => {
     collection.insertOne(entry, (err, r) => {
@@ -132,5 +115,24 @@ function saveEntry(entry) {
       assert.equal(1, r.insertedCount);
       finishUp();
     });
+  });
+}
+
+// do something with the database
+// the caller must pass a callback, which we will call with the db and collection;
+// then the caller must call *another* callback to close the database connection
+function connectAnd(callback) {
+  MongoClient.connect(url, { useNewUrlParser: true }, 
+    function (err, client) {
+    
+      assert.equal(null, err);
+      // console.log("Connected successfully to database");
+
+      const db = client.db(dbName);
+      const collection = db.collection('entries');
+
+      callback(db, collection, () => {
+        client.close();
+      });
   });
 }
