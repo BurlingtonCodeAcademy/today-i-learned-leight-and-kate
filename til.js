@@ -73,6 +73,7 @@ function createEntry(text) {
   return entry;
 }
 
+
 // print all entries, in chronological order
 async function printEntries() {
   storedEntries()
@@ -80,9 +81,6 @@ async function printEntries() {
 
       console.log("Finding all entries")
       let cursor = collection.find({}).sort([['when', 1]]);
-
-      console.log("Found entries")
-
       let currentDay;
       cursor.forEach((entry) => {
         currentDay = printEntry(entry, currentDay);
@@ -146,7 +144,10 @@ function storedEntries() {
       // execute after all the other `then`s added by the caller...
       // hopefully :-)
       // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises#Timing
-      // unfortunately this seems to break `let collection = await storedEntries()`
+      //
+      // Unfortunately, this seems to break code like this:
+      //    let collection = await storedEntries()
+      //    let cursor = await collection.find({})
       // 
       promise.then(() => {
         console.log("Closing connection to database...");
