@@ -75,15 +75,19 @@ function createEntry(text) {
 
 // print all entries, in chronological order
 async function printEntries() {
-  storedEntries().then((collection) => {
-    let cursor = collection.find({}).sort([['when', 1]]);
-    let currentDay;
-    cursor.forEach((entry) => {
-      currentDay = printEntry(entry, currentDay);
-    }, function (err) {
-      assert.equal(null, err); // no proper error handling, so fail hard
+  storedEntries()
+    .then((collection) => {
+
+      console.log("Finding all entries")
+      let cursor = collection.find({}).sort([['when', 1]]);
+
+      console.log("Found entries")
+
+      let currentDay;
+      cursor.forEach((entry) => {
+        currentDay = printEntry(entry, currentDay);
+      })
     });
-  });
 }
 
 /*
@@ -114,11 +118,11 @@ function printEntry(entry, currentDay) {
 
 async function saveEntry(entry) {
   storedEntries().then((collection) => {
-    collection.insertOne(entry, (err, r) => {
-      // sanity check assertions
-      assert.equal(null, err);
-      assert.equal(1, r.insertedCount);
-    });
+    collection.insertOne(entry)
+      .then((result) => {
+        assert.equal(1, result.insertedCount); // sanity check
+        console.log('Inserted fact as id ' + result.insertedId)
+      })
   });
 }
 
@@ -142,10 +146,15 @@ function storedEntries() {
       // execute after all the other `then`s added by the caller...
       // hopefully :-)
       // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises#Timing
+      // unfortunately this seems to break `let collection = await storedEntries()`
+      // 
       promise.then(() => {
-        console.log("Closing connection to database");
+        console.log("Closing connection to database...");
         client.close();
+        console.log("Closed connection to database");
       });
+
+      return promise;
     });
   })
 
