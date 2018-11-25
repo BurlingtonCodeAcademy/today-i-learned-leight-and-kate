@@ -1,4 +1,4 @@
-#!/usr/bin/env node 
+#!/usr/bin/env node
 'use strict';
 
 /*
@@ -15,28 +15,29 @@ const moment = require('moment');
 // const url = 'mongodb://$[username]:$[password]@$[hostlist]/$[database]?authSource=$[authSource]';
 
 // see https://devcenter.heroku.com/articles/mongolab
-const url = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+const dbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const dbName = 'til';
 
 start();
 
-function start() {
+async function start() {
   // the first two args are full paths to the executable files,
   // so ignore them
   let params = process.argv.slice(2);
+
   // the first real arg is the command
   let command = params.shift();
-  
+
   if (command === 'help' || !command) {
     help();
   }
   else if (command === 'add') {
     let text = params.join(' ').trim();
     let entry = createEntry(text);
-    saveEntry(entry);
+    await saveEntry(entry);
   }
   else if (command === 'list') {
-    printEntries();
+    await printEntries();
   }
   else {
     help();
@@ -47,6 +48,10 @@ function start() {
 function help() {
   console.log(`Today I Learned
   
+  Run locally with:
+  
+    node ./til.js
+
   Usage: 
   
   til add "something cool i learned today"
@@ -69,15 +74,14 @@ function createEntry(text) {
 }
 
 // print all entries, in chronological order
-function printEntries() {
-  connectAnd((db, collection, finishUp) => {
+async function printEntries() {
+  storedEntries().then((collection) => {
     let cursor = collection.find({}).sort([['when', 1]]);
     let currentDay;
     cursor.forEach((entry) => {
       currentDay = printEntry(entry, currentDay);
     }, function (err) {
-      assert.equal(null, err);
-      finishUp();
+      assert.equal(null, err); // no proper error handling, so fail hard
     });
   });
 }
@@ -108,31 +112,58 @@ function printEntry(entry, currentDay) {
   return currentDay;
 }
 
-function saveEntry(entry) {
-  connectAnd((db, collection, finishUp) => {
+async function saveEntry(entry) {
+  storedEntries().then((collection) => {
     collection.insertOne(entry, (err, r) => {
+      // sanity check assertions
       assert.equal(null, err);
       assert.equal(1, r.insertedCount);
-      finishUp();
     });
   });
 }
 
-// do something with the database
-// the caller must pass a callback, which we will call with the db and collection;
-// then the caller must call *another* callback to close the database connection
-function connectAnd(callback) {
-  MongoClient.connect(url, { useNewUrlParser: true }, 
-    function (err, client) {
-    
-      assert.equal(null, err);
-      // console.log("Connected successfully to database");
+// fact collection
 
+function storedEntries() {
+  const promise = new Promise((resolve, reject) => {
+    console.log("Connecting to database...");
+    const connected = MongoClient.connect(dbUrl, { useNewUrlParser: true })
+    connected.then((client) => {
+
+      console.log("Connected to database.");
+      const db = client.db(dbName);
+      const collection = db.collection('entries');
+
+      // pass the collection in to the caller's `then` block
+      resolve(collection);
+
+      // tacking a `then` on to this promise after resolving it
+      // adds it to the end of the microtask queue, so it will
+      // execute after all the other `then`s added by the caller...
+      // hopefully :-)
+      // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises#Timing
+      promise.then(() => {
+        console.log("Closing connection to database");
+        client.close();
+      });
+    });
+  })
+
+  return promise;
+}
+
+// OLD CODE:
+// the caller must pass a callback, which we will call with the db and collection;
+// then the caller must call *another* callback to close the database connection.
+function connectAnd(callback) {
+  MongoClient.connect(dbUrl, { useNewUrlParser: true },
+    function (err, client) {
+      assert.equal(null, err);
       const db = client.db(dbName);
       const collection = db.collection('entries');
 
       callback(db, collection, () => {
         client.close();
       });
-  });
+    });
 }
