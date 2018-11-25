@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 'use strict';
 
+/* 
+  Today I Learned command-line app
+*/
+
 const FactStore = require('./lib/factStore')
 
 // Connection URL format:
 // const url = 'mongodb://$[username]:$[password]@$[hostlist]/$[database]?authSource=$[authSource]';
-
 // see https://devcenter.heroku.com/articles/mongolab
 const dbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 const store = new FactStore(dbUrl);
