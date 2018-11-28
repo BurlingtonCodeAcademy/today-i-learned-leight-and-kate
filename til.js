@@ -1,16 +1,16 @@
 #!/usr/bin/env node
-'use strict';
+"use strict";
 
 /* 
   Today I Learned command-line app
 */
 
-const FactStore = require('./lib/factStore')
+const FactStore = require("./lib/factStore");
 
 // Connection URL format:
 // const url = 'mongodb://$[username]:$[password]@$[hostlist]/$[database]?authSource=$[authSource]';
 // see https://devcenter.heroku.com/articles/mongolab
-const dbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+const dbUrl = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const store = new FactStore(dbUrl);
 
 start();
@@ -23,23 +23,20 @@ async function start() {
   // the first real arg is the command
   let command = params.shift();
 
-  if (command === 'help' || !command) {
+  if (command === "help" || !command) {
     help();
-  }
-  else if (command === 'add') {
-    let text = params.join(' ').trim();
-    await store.addFact(text);
-  }
-  else if (command === 'list') {
+  } else if (command === "add") {
+    console.log(params);
+    let [author, title, body] = params;
+    await store.addFact(author, title, body);
+  } else if (command === "list") {
     await store.printAll();
-  }
-  else {
+  } else {
     help();
   }
 
   // The DB connection is still open, so we must explicitly exit
   process.exit();
-
 }
 
 // display help and exit
@@ -58,6 +55,6 @@ function help() {
     shows all entries, day by day
   til help
     shows this message
-  `)
+  `);
   process.exit(0);
 }

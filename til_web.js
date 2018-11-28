@@ -17,7 +17,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(express.static("public")); // static file server
-app.use(express.urlencoded({ extended: true })); // all POST bodies are expected to be URL-encoded
+app.use(express.json()); // all POST bodies are expected to be JSON
 
 const dbUrl = process.env.MONGODB_URI || "mongodb://localhost:27017";
 const store = new FactStore(dbUrl);
@@ -42,7 +42,10 @@ async function getAll(request, response) {
 app.post("/facts", addFact);
 
 async function addFact(request, response) {
-  let result = await store.addFact(request.body.text.trim());
+  const { author, title, body } = request.body;
+  console.log(request.body);
+  console.log("author: " + author);
+  let result = await store.addFact(author.trim(), title.trim(), body.trim());
   let output = {
     status: "ok",
     id: result.id
