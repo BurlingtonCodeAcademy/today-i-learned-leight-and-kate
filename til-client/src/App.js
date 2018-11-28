@@ -6,25 +6,15 @@ class App extends Component {
   constructor() {
     super();
     this.state = { entries: [], author: "", title: "", body: "" };
+    this.BCA = "http://10.1.10.58";
+    this.LOCAL = "http://localhost";
   }
 
   componentDidMount() {
-    fetch("http://10.1.10.58:5000/facts")
+    fetch(`${this.BCA}:5000/facts`)
       .then(response => response.json())
       .then(data => this.setState({ entries: data }));
   }
-
-  // componentDidUpdate(prevState) {
-  //   console.log(this.state.entries);
-
-  //   console.log(prevState.entries);
-  //   console.log(prevState);
-  //   if (this.state.entries !== prevState.entries) {
-  //     fetch("http://10.1.10.58:5000/facts")
-  //       .then(response => response.json())
-  //       .then(data => this.setState({ entries: data }));
-  //   }
-  // }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
@@ -32,8 +22,8 @@ class App extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const { author, title, body } = this.state;
-    fetch("http://10.1.10.58:5000/facts", {
+    const { author, title, body, entries } = this.state;
+    fetch(`${this.BCA}:5000/facts`, {
       method: "POST",
       mode: "cors",
       headers: {
@@ -41,10 +31,13 @@ class App extends Component {
       },
       body: JSON.stringify({ author: author, title: title, body: body })
     }).then(response => response.json());
-    // clean this up
-    const newState = this.state;
-    this.setState({ author: "", title: "", body: "" });
-    this.state.entries.push({ author: author, title, body });
+    entries.unshift({ author: author, title, body });
+    this.setState({
+      author: "",
+      title: "",
+      body: "",
+      entries
+    });
   };
 
   render() {
