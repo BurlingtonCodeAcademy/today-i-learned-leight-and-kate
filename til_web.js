@@ -42,10 +42,11 @@ async function getAll(request, response) {
 app.post("/facts", addFact);
 
 async function addFact(request, response) {
-  const { author, title, body } = request.body;
-  console.log(request.body);
-  console.log("author: " + author);
-  let result = await store.addFact(author.trim(), title.trim(), body.trim());
+  const [author, title, body] = Object.values(request.body).map(field =>
+    field.trim()
+  );
+  if (!title) throw "Title cannot be empty";
+  let result = await store.addFact(author, title, body);
   let output = {
     status: "ok",
     id: result.id

@@ -15,7 +15,11 @@ class App extends Component {
     fetch(`${this.PATH}:5000/facts`)
       .then(response => response.json())
       .then(data => this.setState({ entries: data }))
-      .catch(() => this.setState({ error: "Failed to fetch content" }));
+      .catch(() => this.setState({ status: "Failed to fetch content" }));
+  }
+
+  componentDidUpdate() {
+    setTimeout(() => this.setState({ status: "" }), 5000);
   }
 
   handleChange = event =>
@@ -34,9 +38,15 @@ class App extends Component {
     })
       .then(() => {
         entries.unshift({ author: author, title, body });
-        this.setState({ author: "", title: "", body: "", entries });
+        this.setState({
+          author: "",
+          title: "",
+          body: "",
+          entries,
+          status: "Successfully Posted!"
+        });
       })
-      .catch(() => this.setState({ error: "Failed to post content" }));
+      .catch(() => this.setState({ status: "Failed to post content" }));
   };
 
   render() {
@@ -72,7 +82,7 @@ class App extends Component {
             <input type="submit" value="Post" className="button" />
           </form>
         </header>
-        <div>{this.state.error}</div>
+        <div>{this.state.status}</div>
         {this.state.entries.map(entry => (
           <Entry key={entry._id} {...entry} />
         ))}
