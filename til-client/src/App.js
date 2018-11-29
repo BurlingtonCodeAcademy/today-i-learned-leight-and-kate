@@ -6,38 +6,37 @@ class App extends Component {
   constructor() {
     super();
     this.state = { entries: [], author: "", title: "", body: "" };
-    this.BCA = "http://10.1.10.58";
-    this.LOCAL = "http://localhost";
+    // const BCA = "http://10.1.10.58";
+    const LOCAL = "http://localhost";
+    this.PATH = LOCAL;
   }
 
   componentDidMount() {
-    fetch(`${this.BCA}:5000/facts`)
+    fetch(`${this.PATH}:5000/facts`)
       .then(response => response.json())
-      .then(data => this.setState({ entries: data }));
+      .then(data => this.setState({ entries: data }))
+      .catch(() => this.setState({ error: "Failed to fetch content" }));
   }
 
-  handleChange = event => {
+  handleChange = event =>
     this.setState({ [event.target.name]: event.target.value });
-  };
 
   handleSubmit = event => {
     event.preventDefault();
     const { author, title, body, entries } = this.state;
-    fetch(`${this.BCA}:5000/facts`, {
+    fetch(`${this.PATH}:5000/facts`, {
       method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ author: author, title: title, body: body })
-    }).then(response => response.json());
-    entries.unshift({ author: author, title, body });
-    this.setState({
-      author: "",
-      title: "",
-      body: "",
-      entries
-    });
+    })
+      .then(() => {
+        entries.unshift({ author: author, title, body });
+        this.setState({ author: "", title: "", body: "", entries });
+      })
+      .catch(() => this.setState({ error: "Failed to post content" }));
   };
 
   render() {
@@ -73,6 +72,7 @@ class App extends Component {
             <input type="submit" value="Post" className="button" />
           </form>
         </header>
+        <div>{this.state.error}</div>
         {this.state.entries.map(entry => (
           <Entry key={entry._id} {...entry} />
         ))}
