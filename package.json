@@ -6,7 +6,8 @@
     "til": "til.js"
   },
   "scripts": {
-    "start": "node til_web.js",
+    "server": "node til_web.js",
+    "client": "cd til-client && yarn start",
     "test": "npx jasmine-node --verbose spec/*.spec.js"
   },
   "repository": {

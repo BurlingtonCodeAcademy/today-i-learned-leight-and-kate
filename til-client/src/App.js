@@ -6,9 +6,9 @@ class App extends Component {
   constructor() {
     super();
     this.state = { entries: [], author: "", title: "", body: "" };
-    // const BCA = "http://10.1.10.58";
-    const LOCAL = "http://localhost";
-    this.PATH = LOCAL;
+    const BCA = "http://10.1.10.58";
+    // const LOCAL = "http://localhost";
+    this.PATH = BCA;
   }
 
   componentDidMount() {
