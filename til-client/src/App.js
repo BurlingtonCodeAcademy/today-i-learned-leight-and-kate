@@ -28,6 +28,8 @@ class App extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const { author, title, body, entries } = this.state;
+    if (!title.trim())
+      return this.setState({ status: "TIL must have a title" });
     fetch(`${this.PATH}:5000/facts`, {
       method: "POST",
       mode: "cors",
