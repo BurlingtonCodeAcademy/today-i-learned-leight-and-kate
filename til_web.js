@@ -60,10 +60,25 @@ app.delete("/facts", deleteFact);
 
 async function deleteFact(request, response) {
   const id = request.body.id;
-  result = await store.deleteFact(id);
+  const result = await store.deleteFact(id);
   let output = {
     status: "ok",
     id: result.id
+  };
+  response.type("application/json").send(JSON.stringify(output));
+}
+
+app.post("/facts/:factId", editFact);
+
+async function editFact(request, response) {
+  const [author, title, body] = Object.values(request.body).map(field =>
+    field.trim()
+  );
+  const id = request.params.factId;
+  const result = await store.editFact(id, author, title, body);
+  let output = {
+    status: "ok",
+    id
   };
   response.type("application/json").send(JSON.stringify(output));
 }
