@@ -6,13 +6,9 @@ a small example of NodeJS using MongoDB
 
 ## Web App
 
-To start the Express Server:
+To start the Express Server and React Client:
 
-    npm run server
-
-To start the React Client
-
-    npm run client
+    npm run dev
 
 ### To install MongoDB:
 

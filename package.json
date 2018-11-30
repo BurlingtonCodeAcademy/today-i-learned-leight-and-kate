@@ -7,9 +7,10 @@
   },
   "scripts": {
     "start": "node til_web.js",
-    "server": "node til_web.js",
+    "server": "nodemon til_web.js",
     "client": "cd til-client && yarn start",
     "test": "npx jasmine-node --verbose spec/*.spec.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "cd til-client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "repository": {
