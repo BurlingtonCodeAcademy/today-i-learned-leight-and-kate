@@ -27,7 +27,7 @@ class App extends Component {
     event.preventDefault();
     const { author, title, body, entries } = this.state;
     if (!title.trim())
-      return this.setState({ status: "TIL must have a title" });
+      return this.setState({ status: "Entry must have a title" });
     fetch(`/facts`, {
       method: "POST",
       mode: "cors",
@@ -44,10 +44,26 @@ class App extends Component {
           title: "",
           body: "",
           entries,
-          status: "Successfully Posted!"
+          status: "Entry successfully posted!"
         });
       })
-      .catch(() => this.setState({ status: "Failed to post content" }));
+      .catch(() => this.setState({ status: "Entry failed to post" }));
+  };
+
+  deleteEntry = id => {
+    const updatedEntries = this.state.entries.filter(entry => id !== entry._id);
+    fetch(`/facts`, {
+      method: "DELETE",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ id })
+    })
+      .then(response => response.json())
+      .then(() =>
+        this.setState({ entries: updatedEntries, status: "Entry deleted" })
+      );
   };
 
   render() {
@@ -85,7 +101,7 @@ class App extends Component {
         </header>
         <div className="status">{this.state.status}</div>
         {this.state.entries.map(entry => (
-          <Entry key={entry._id} {...entry} />
+          <Entry key={entry._id} {...entry} deleteEntry={this.deleteEntry} />
         ))}
       </div>
     );

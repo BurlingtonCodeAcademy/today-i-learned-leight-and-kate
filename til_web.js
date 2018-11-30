@@ -56,6 +56,18 @@ async function addFact(request, response) {
   response.type("application/json").send(JSON.stringify(output));
 }
 
+app.delete("/facts", deleteFact);
+
+async function deleteFact(request, response) {
+  const id = request.body.id;
+  result = await store.deleteFact(id);
+  let output = {
+    status: "ok",
+    id: result.id
+  };
+  response.type("application/json").send(JSON.stringify(output));
+}
+
 if (process.env.NODE_ENV === "production") {
   // Serve any static files
   app.use(express.static(path.join(__dirname, "til-client/build")));

@@ -3,10 +3,8 @@ import moment from "moment";
 import "./App.css";
 
 class Entry extends Component {
-  constructor(props) {
-    super(props);
+  handleClick = () => this.props.deleteEntry(this.props._id);
 
-  }
   render() {
     return (
       <div className="Entry-box">
@@ -20,6 +18,7 @@ class Entry extends Component {
         <div className="Entry-body">{this.props.body}</div>
         <br />
         <div className="Entry-author">{this.props.author}</div>
+        <button onClick={this.handleClick}>&times;</button>
       </div>
     );
   }
