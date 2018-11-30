@@ -54,13 +54,4 @@ async function addFact(request, response) {
   response.type("application/json").send(JSON.stringify(output));
 }
 
-if (process.env.NODE_ENV === "production") {
-  // Serve any static files
-  app.use(express.static(path.join(__dirname, "til-client/build")));
-  // Handle React routing, return all requests to React app
-  app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname, "til-client/build", "index.html"));
-  });
-}
-
 app.listen(port, () => console.log(`TIL web app listening on port ${port}!`));
