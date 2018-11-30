@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Entry from "./Entry.js";
+import Form from "./Form.js"
 import "./App.css";
 
 class App extends Component {
@@ -66,12 +67,53 @@ class App extends Component {
       );
   };
 
+  editEntry = id => {
+    this.setState({ editId: id })
+  }
+
+
+  editChange = event => {
+    const entryToEdit = this.state.entries.filter(entry => entry._id === this.state.editId)
+    const field = event.target.name;
+    console.log(entryToEdit.field)
+    this.setState({ [entryToEdit[field]]: event.target.value });
+  }
+
+  /*
+   editSubmit = event => {
+      event.preventDefault();
+      const { author, title, body } = this.state;
+      
+      fetch(`/facts`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ author, title, body })
+      })
+        .then(response => response.json())
+        .then(entry => {
+          entries.unshift({ author, title, body, _id: entry.id });
+          this.setState({
+            author: "",
+            title: "",
+            body: "",
+            entries,
+            status: "Entry successfully posted!"
+          });
+        })
+        .catch(() => this.setState({ status: "Entry failed to post" }));
+    };
+  */
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <h1>Today I Learned</h1>
-          <form id="grid-container" onSubmit={this.handleSubmit}>
+          <Form {...this.state} handleSubmit={this.handleSubmit} handleChange={this.handleChange} />
+
+          {/*<form id="grid-container" onSubmit={this.handleSubmit}>
             <input
               type="text"
               name="title"
@@ -97,12 +139,18 @@ class App extends Component {
               onChange={this.handleChange}
             />
             <input type="submit" value="Post" className="button" />
-          </form>
+    </form>*/}
         </header>
         <div className="status">{this.state.status}</div>
-        {this.state.entries.map(entry => (
-          <Entry key={entry._id} {...entry} deleteEntry={this.deleteEntry} />
-        ))}
+        {this.state.entries.map(entry => {
+          let result;
+          if (this.state.editId === entry._id) {
+            result = <Form {...entry} onSubmit={this.editSubmit} handleChange={this.editChange} />
+          } else {
+            result = <Entry key={entry._id} {...entry} deleteEntry={this.deleteEntry} editEntry={this.editEntry} />
+          }
+          return result
+        })}
       </div>
     );
   }

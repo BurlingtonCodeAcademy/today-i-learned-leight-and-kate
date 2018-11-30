@@ -71,7 +71,6 @@ p {
   font-style: italic;
 }
 .Entry-author {
-  align-self: flex-end;
   color: gray;
   font-size: 20px;
   font-weight: normal;
@@ -146,9 +145,24 @@ textarea {
   font-size: 15px;
   font-weight: bold;
 }
-.button:hover {
+.button, .small-button:hover {
   background-color: white;
   color: palevioletred;
+}
+.small-button {
+  grid-area: button;
+  width: 50px;
+  padding: 8px;
+  margin: 10px;
+  background-color: palevioletred;
+  border: 0px;
+  border-radius: 5px;
+  color: white;
+  font-size: 12px;
+}
+
+.buttonArea {
+  width: 100%;
 }
 
 .status {
