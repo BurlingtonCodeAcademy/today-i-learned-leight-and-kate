@@ -16,7 +16,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use(express.static("public")); // static file server
+// app.use(express.static("public"));
 app.use(express.json()); // all POST bodies are expected to be JSON
 
 const dbUrl = process.env.MONGODB_URI || "mongodb://localhost:27017";
@@ -56,10 +56,10 @@ async function addFact(request, response) {
 
 if (process.env.NODE_ENV === "production") {
   // Serve any static files
-  app.use(express.static("til-client/build"));
+  app.use(express.static(path.join(__dirname, "til-client/build")));
   // Handle React routing, return all requests to React app
   app.get("*", function(req, res) {
-    res.sendFile("til-client/build", "index.html");
+    res.sendFile(path.join(__dirname, "til-client/build", "index.html"));
   });
 }
 
