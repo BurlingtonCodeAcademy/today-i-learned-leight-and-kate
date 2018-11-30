@@ -20,7 +20,8 @@ app.use(function(req, res, next) {
 // app.use(express.static("public"));
 app.use(express.json()); // all POST bodies are expected to be JSON
 
-const dbUrl = process.env.MONGODB_URI || "mongodb://localhost:27017";
+const dbUrl =
+  process.env.MONGODB_URI || "mongodb://til:til123@ds121834.mlab.com:21834/til";
 const store = new FactStore(dbUrl);
 
 app.get("/facts", getAll);
