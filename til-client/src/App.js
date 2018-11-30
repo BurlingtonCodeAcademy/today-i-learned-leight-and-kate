@@ -6,20 +6,18 @@ class App extends Component {
   constructor() {
     super();
     this.state = { entries: [], author: "", title: "", body: "" };
-    const BCA = "http://10.1.10.58";
-    // const LOCAL = "http://localhost";
-    this.PATH = BCA;
   }
 
   componentDidMount() {
-    fetch(`${this.PATH}:5000/facts`)
+    fetch(`/facts`)
       .then(response => response.json())
       .then(data => this.setState({ entries: data }))
       .catch(() => this.setState({ status: "Failed to fetch content" }));
   }
 
   componentDidUpdate() {
-    setTimeout(() => this.setState({ status: "" }), 5000);
+    clearTimeout(this.timeoutId);
+    this.timeoutId = setTimeout(() => this.setState({ status: "" }), 3000);
   }
 
   handleChange = event =>
@@ -30,16 +28,17 @@ class App extends Component {
     const { author, title, body, entries } = this.state;
     if (!title.trim())
       return this.setState({ status: "TIL must have a title" });
-    fetch(`${this.PATH}:5000/facts`, {
+    fetch(`/facts`, {
       method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ author: author, title: title, body: body })
+      body: JSON.stringify({ author, title, body })
     })
-      .then(() => {
-        entries.unshift({ author: author, title, body });
+      .then(response => response.json())
+      .then(entry => {
+        entries.unshift({ author, title, body, _id: entry.id });
         this.setState({
           author: "",
           title: "",
@@ -84,7 +83,7 @@ class App extends Component {
             <input type="submit" value="Post" className="button" />
           </form>
         </header>
-        <div>{this.state.status}</div>
+        <div className="status">{this.state.status}</div>
         {this.state.entries.map(entry => (
           <Entry key={entry._id} {...entry} />
         ))}

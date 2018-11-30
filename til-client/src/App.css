@@ -55,7 +55,7 @@ p {
   font-size: 26px;
   font-weight: bold;
   font-family: "Times New Roman", Times, serif;
-  margin: 30px 25% ;
+  margin: 30px 25%;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -70,7 +70,7 @@ p {
   font-weight: normal;
   font-style: italic;
 }
-.Entry-author{
+.Entry-author {
   align-self: flex-end;
   color: gray;
   font-size: 20px;
@@ -116,14 +116,12 @@ input {
   justify-self: end;
   border-radius: 5px;
   border: 0px;
-
 }
 #title {
   grid-area: title;
   justify-self: end;
   border-radius: 5px;
   border: 0px;
-
 }
 textarea {
   grid-area: body;
@@ -134,7 +132,6 @@ textarea {
   margin: 5px;
   border-radius: 5px;
   border: 0px;
-
 }
 
 .button {
@@ -152,4 +149,9 @@ textarea {
 .button:hover {
   background-color: white;
   color: palevioletred;
+}
+
+.status {
+  color: white;
+  margin: 10px;
 }

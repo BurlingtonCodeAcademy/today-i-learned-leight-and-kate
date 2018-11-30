@@ -8,7 +8,8 @@
   "scripts": {
     "server": "node til_web.js",
     "client": "cd til-client && yarn start",
-    "test": "npx jasmine-node --verbose spec/*.spec.js"
+    "test": "npx jasmine-node --verbose spec/*.spec.js",
+    "heroku-postbuild": "cd til-client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "repository": {
     "type": "git",

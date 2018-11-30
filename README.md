@@ -4,6 +4,16 @@ a small example of NodeJS using MongoDB
 
 ## Installation
 
+## Web App
+
+To start the Express Server:
+
+    npm run server
+
+To start the React Client
+
+    npm run client
+
 ### To install MongoDB:
 
 - on MacOS with Homebrew, run:
@@ -53,13 +63,3 @@ To add a lesson:
 To list all lessons:
 
     til list
-
-## Web App
-
-To start the Express Server:
-
-    npm run server
-
-To start the React Client
-
-    npm run client
