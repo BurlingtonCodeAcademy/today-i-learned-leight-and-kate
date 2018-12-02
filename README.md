@@ -22,6 +22,10 @@ Cypress Testing:
 
     npm test
 
+Jest and Enzyme Testing:
+
+    cd til-client && yarn test
+
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### To install MongoDB:
