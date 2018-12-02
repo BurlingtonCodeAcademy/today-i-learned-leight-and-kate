@@ -1,6 +1,6 @@
 # Today I Learned
 
-a small example of NodeJS using MongoDB
+a small example of NodeJS using MongoDB and ReactJS
 
 ## Installation
 
@@ -8,19 +8,21 @@ a small example of NodeJS using MongoDB
 
 Hosted at: https://secure-wildwood-12307.herokuapp.com/
 
-To start the Express Server:
+Database: "mongodb://til:til123@ds121834.mlab.com:21834/til"
 
-    npm run server
+Installation:
 
-To start the React Client
+    npm install
 
-    npm run client
-
-Concurrently can also be used to run both at the same time
-
-    npm install -g concurrently
+Launch server and client with concurrently:
 
     npm run dev
+
+Cypress Testing:
+
+    npm test
+
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### To install MongoDB:
 
@@ -44,12 +46,10 @@ Concurrently can also be used to run both at the same time
 - all other systems:
   - see https://docs.mongodb.com/guides/server/install/
 
-### To install TIL:
+### To install TIL CLI:
 
-Clone this repo, then run
+Create til command:
 
-    cd til
-    npm install
     npm link
 
 (on MacOS with Homebrew, you may also need to do
@@ -58,7 +58,7 @@ Clone this repo, then run
 
 )
 
-## Usage
+## CLI Usage
 
 From the command line, run
 

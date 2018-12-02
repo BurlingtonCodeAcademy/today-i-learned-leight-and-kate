@@ -24,7 +24,7 @@ class App extends Component {
   handleChange = event =>
     this.setState({ [event.target.name]: event.target.value });
 
-  handleSubmit = event => {
+  createEntry = event => {
     event.preventDefault();
     const { author, title, body, entries } = this.state;
     if (!title.trim())
@@ -64,12 +64,19 @@ class App extends Component {
       .then(response => response.json())
       .then(() =>
         this.setState({ entries: updatedEntries, status: "Entry deleted" })
-      );
+      )
+      .catch(() => this.setState({ status: "Failed to delete entry" }));
   };
 
-  editEntry = id => this.setState({ editId: id });
+  renderForm = id => this.setState({ editId: id });
+  renderEntry = () => {
+    fetch(`/facts`)
+      .then(response => response.json())
+      .then(data => this.setState({ entries: data, editId: "" }))
+      .catch(() => this.setState({ status: "Failed to fetch content" }));
+  };
 
-  editChange = event => {
+  handleEditChange = event => {
     const entryToEdit = this.state.entries.filter(
       entry => entry._id === this.state.editId
     )[0];
@@ -78,13 +85,14 @@ class App extends Component {
     this.setState({ entryToEdit });
   };
 
-  editSubmit = event => {
+  updateEntry = event => {
     event.preventDefault();
     const entryToEdit = this.state.entries.filter(
       entry => entry._id === this.state.editId
     )[0];
     const { author, title, body } = entryToEdit;
-
+    if (!title.trim())
+      return this.setState({ status: "Entry must have a title" });
     fetch(`/facts/${this.state.editId}`, {
       method: "POST",
       mode: "cors",
@@ -100,45 +108,42 @@ class App extends Component {
           status: "Entry successfully updated!"
         });
       })
-      .catch(() => this.setState({ status: "Entry failed to edit" }));
+      .catch(() => this.setState({ status: "Failed to update entry" }));
   };
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <h1>Today I Learned</h1>
-          <Form
-            {...this.state}
-            buttonText="Post"
-            handleSubmit={this.handleSubmit}
-            handleChange={this.handleChange}
-          />
+          {!this.state.editId && (
+            <Form
+              {...this.state}
+              buttonText="Post"
+              handleSubmit={this.createEntry}
+              handleChange={this.handleChange}
+            />
+          )}
         </header>
         <div className="status">{this.state.status}</div>
-        {this.state.entries.map(entry => {
-          let result;
-          if (this.state.editId === entry._id) {
-            result = (
-              <Form
-                key={entry._id}
-                {...entry}
-                buttonText="Update"
-                handleSubmit={this.editSubmit}
-                handleChange={this.editChange}
-              />
-            );
-          } else {
-            result = (
-              <Entry
-                key={entry._id}
-                {...entry}
-                deleteEntry={this.deleteEntry}
-                editEntry={this.editEntry}
-              />
-            );
-          }
-          return result;
-        })}
+        {this.state.entries.map(entry =>
+          this.state.editId === entry._id ? (
+            <Form
+              key={entry._id}
+              {...entry}
+              buttonText="Update"
+              handleSubmit={this.updateEntry}
+              handleChange={this.handleEditChange}
+              renderEntry={this.renderEntry}
+            />
+          ) : (
+            <Entry
+              key={entry._id}
+              {...entry}
+              deleteEntry={this.deleteEntry}
+              renderForm={this.renderForm}
+            />
+          )
+        )}
       </div>
     );
   }

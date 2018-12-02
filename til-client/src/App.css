@@ -139,13 +139,14 @@ textarea {
   padding: 8px;
   margin: 10px;
   background-color: palevioletred;
-  border: 0px;
+  border: 1px white solid;
   border-radius: 5px;
   color: white;
   font-size: 15px;
   font-weight: bold;
 }
-.button, .small-button:hover {
+.button:hover,
+.small-button:hover {
   background-color: white;
   color: palevioletred;
 }

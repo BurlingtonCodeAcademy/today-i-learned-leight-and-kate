@@ -3,9 +3,8 @@ import moment from "moment";
 import "./App.css";
 
 class Entry extends Component {
-  
   handleDelete = () => this.props.deleteEntry(this.props._id);
-  handleEdit = () => this.props.editEntry(this.props._id);
+  handleEdit = () => this.props.renderForm(this.props._id);
 
   render() {
     return (
@@ -21,9 +20,17 @@ class Entry extends Component {
         <br />
         <div className="Entry-author">{this.props.author}</div>
         <div className="buttonArea">
-        <button className="small-button" onClick={this.handleEdit}>edit</button><button className="small-button" onClick={this.handleDelete}>delete</button></div>
-        
-
+          <button className="small-button" id="edit" onClick={this.handleEdit}>
+            edit
+          </button>
+          <button
+            className="small-button"
+            id="delete"
+            onClick={this.handleDelete}
+          >
+            delete
+          </button>
+        </div>
       </div>
     );
   }

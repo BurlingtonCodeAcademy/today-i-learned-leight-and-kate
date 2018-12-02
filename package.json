@@ -9,7 +9,7 @@
     "start": "node til_web.js",
     "server": "nodemon til_web.js",
     "client": "cd til-client && yarn start",
-    "test": "npx jasmine-node --verbose spec/*.spec.js",
+    "test": "npx cypress open",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "heroku-postbuild": "cd til-client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/BurlingtonCodeAcademy/til#readme",
   "dependencies": {
+    "concurrently": "^4.1.0",
     "express": "^4.16.4",
     "mime": "^2.3.1",
     "mime-types": "^2.1.18",
@@ -36,6 +37,7 @@
     "react-scripts": "^2.1.1"
   },
   "devDependencies": {
-    "jasmine-node": "^1.15.0"
+    "jasmine-node": "^1.15.0",
+    "cypress": "^3.1.2"
   }
 }
