@@ -10,10 +10,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch(`/facts`)
-      .then(response => response.json())
-      .then(data => this.setState({ entries: data }))
-      .catch(() => this.setState({ status: "Failed to fetch content" }));
+    this.getEntries();
   }
 
   componentDidUpdate() {
@@ -21,8 +18,18 @@ class App extends Component {
     this.timeoutId = setTimeout(() => this.setState({ status: "" }), 3000);
   }
 
+  renderForm = id => this.setState({ editId: id });
+  renderEntry = () => this.getEntries();
+
   handleChange = event =>
     this.setState({ [event.target.name]: event.target.value });
+
+  getEntries() {
+    fetch(`/facts`)
+      .then(response => response.json())
+      .then(entries => this.setState({ entries, editId: "" }))
+      .catch(() => this.setState({ status: "Failed to fetch content" }));
+  }
 
   createEntry = event => {
     event.preventDefault();
@@ -66,14 +73,6 @@ class App extends Component {
         this.setState({ entries: updatedEntries, status: "Entry deleted" })
       )
       .catch(() => this.setState({ status: "Failed to delete entry" }));
-  };
-
-  renderForm = id => this.setState({ editId: id });
-  renderEntry = () => {
-    fetch(`/facts`)
-      .then(response => response.json())
-      .then(data => this.setState({ entries: data, editId: "" }))
-      .catch(() => this.setState({ status: "Failed to fetch content" }));
   };
 
   handleEditChange = event => {
