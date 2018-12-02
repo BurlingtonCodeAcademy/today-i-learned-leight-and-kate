@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./App.css";
 
 class Form extends Component {
-
   render() {
     return (
       <form id="grid-container" onSubmit={this.props.handleSubmit}>
@@ -30,9 +29,10 @@ class Form extends Component {
           value={this.props.body}
           onChange={this.props.handleChange}
         />
-        <input type="submit" value="Post" className="button" />
-      </form>)
+        <input type="submit" value={this.props.buttonText} className="button" />
+      </form>
+    );
   }
 }
 
-export default Form;                                                                                
+export default Form;

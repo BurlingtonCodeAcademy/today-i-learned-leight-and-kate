@@ -6,6 +6,8 @@ a small example of NodeJS using MongoDB
 
 ## Web App
 
+Hosted at: https://secure-wildwood-12307.herokuapp.com/
+
 To start the Express Server:
 
     npm run server
@@ -13,6 +15,12 @@ To start the Express Server:
 To start the React Client
 
     npm run client
+
+Concurrently can also be used to run both at the same time
+
+    npm install -g concurrently
+
+    npm run dev
 
 ### To install MongoDB:
 

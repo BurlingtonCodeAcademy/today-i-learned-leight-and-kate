@@ -78,7 +78,7 @@ async function editFact(request, response) {
   const result = await store.editFact(id, author, title, body);
   let output = {
     status: "ok",
-    id
+    id: id
   };
   response.type("application/json").send(JSON.stringify(output));
 }

@@ -92,20 +92,15 @@ class App extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ author, title, body })
-    }); //.then(response => response.json());
-    /*
-        .then(entry => {
-          entries.unshift({ author, title, body, _id: entry.id });
-          this.setState({
-            author: "",
-            title: "",
-            body: "",
-            entries,
-            status: "Entry successfully posted!"
-          });
-        })
-        .catch(() => this.setState({ status: "Entry failed to post" }));
-        */
+    })
+      .then(response => response.json())
+      .then(() => {
+        this.setState({
+          editId: "",
+          status: "Entry successfully updated!"
+        });
+      })
+      .catch(() => this.setState({ status: "Entry failed to edit" }));
   };
   render() {
     return (
@@ -114,37 +109,10 @@ class App extends Component {
           <h1>Today I Learned</h1>
           <Form
             {...this.state}
+            buttonText="Post"
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
           />
-
-          {/*<form id="grid-container" onSubmit={this.handleSubmit}>
-            <input
-              type="text"
-              name="title"
-              autoComplete="off"
-              placeholder="title"
-              id="title"
-              value={this.state.title}
-              onChange={this.handleChange}
-            />
-            <input
-              type="text"
-              name="author"
-              placeholder="author"
-              id="author"
-              value={this.state.author}
-              onChange={this.handleChange}
-            />
-            <textarea
-              name="body"
-              autoComplete="off"
-              placeholder="body"
-              value={this.state.body}
-              onChange={this.handleChange}
-            />
-            <input type="submit" value="Post" className="button" />
-    </form>*/}
         </header>
         <div className="status">{this.state.status}</div>
         {this.state.entries.map(entry => {
@@ -154,6 +122,7 @@ class App extends Component {
               <Form
                 key={entry._id}
                 {...entry}
+                buttonText="Update"
                 handleSubmit={this.editSubmit}
                 handleChange={this.editChange}
               />
