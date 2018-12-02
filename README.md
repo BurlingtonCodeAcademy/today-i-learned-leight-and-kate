@@ -8,7 +8,7 @@ a small example of NodeJS using MongoDB and ReactJS
 
 Hosted at: https://secure-wildwood-12307.herokuapp.com/
 
-Database: "mongodb://til:til123@ds121834.mlab.com:21834/til"
+Database: [mongodb://til:til123@ds121834.mlab.com:21834/til](mongodb://til:til123@ds121834.mlab.com:21834/til)
 
 Installation:
 
