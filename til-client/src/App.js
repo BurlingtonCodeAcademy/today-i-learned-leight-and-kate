@@ -46,7 +46,13 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(entry => {
-        entries.unshift({ author, title, body, _id: entry.id });
+        entries.unshift({
+          author,
+          title,
+          body,
+          when: entry.when,
+          _id: entry.id
+        });
         this.setState({
           author: "",
           title: "",

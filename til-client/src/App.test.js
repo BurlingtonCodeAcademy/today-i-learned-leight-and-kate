@@ -1,7 +1,6 @@
 import React from "react";
-import { mount, shallow, render } from "enzyme";
+import { mount, shallow } from "enzyme";
 import App from "./App";
-import Form from "./Form";
 
 describe("Using the App", () => {
   it("Renders without crashing", () => {

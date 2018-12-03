@@ -1,11 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import moment from "moment";
 import "./App.css";
 
 class Entry extends Component {
-  handleDelete = () => this.props.deleteEntry(this.props._id);
-  handleEdit = () => this.props.renderForm(this.props._id);
-
   render() {
     return (
       <div className="Entry-box">
@@ -20,13 +18,17 @@ class Entry extends Component {
         <br />
         <div className="Entry-author">{this.props.author}</div>
         <div className="buttonArea">
-          <button className="small-button" id="edit" onClick={this.handleEdit}>
+          <button
+            className="small-button"
+            id="edit"
+            onClick={() => this.props.renderForm(this.props._id)}
+          >
             edit
           </button>
           <button
             className="small-button"
             id="delete"
-            onClick={this.handleDelete}
+            onClick={() => this.props.deleteEntry(this.props._id)}
           >
             delete
           </button>
@@ -35,5 +37,15 @@ class Entry extends Component {
     );
   }
 }
+
+Entry.propTypes = {
+  deleteEntry: PropTypes.func.isRequired,
+  renderForm: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
+  _id: PropTypes.string.isRequired,
+  when: PropTypes.string.isRequired
+};
 
 export default Entry;

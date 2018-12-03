@@ -35,14 +35,16 @@ async function getAll(_request, response) {
 app.post("/facts", addFact);
 
 async function addFact(request, response) {
-  const [author, title, body] = Object.values(request.body).map(field =>
-    field.trim()
-  );
+  const { author, title, body } = request.body;
+  author.trim();
+  title.trim();
+  body.trim();
   if (!title) throw "Title cannot be empty";
   let result = await store.addFact(author, title, body);
   let output = {
     status: "ok",
-    id: result.id
+    id: result.id,
+    when: result.when
   };
   response.type("application/json").send(JSON.stringify(output));
 }
@@ -62,14 +64,16 @@ async function deleteFact(request, response) {
 app.post("/facts/:factId", editFact);
 
 async function editFact(request, response) {
-  const [author, title, body] = Object.values(request.body).map(field =>
-    field.trim()
-  );
+  const { author, title, body } = request.body;
+  author.trim();
+  title.trim();
+  body.trim();
   const id = request.params.factId;
-  await store.editFact(id, author, title, body);
+  const result = await store.editFact(id, author, title, body);
+  await console.log(result.status);
   let output = {
     status: "ok",
-    id
+    id: result.id
   };
   response.type("application/json").send(JSON.stringify(output));
 }

@@ -1,4 +1,4 @@
-describe("React Client", () => {
+describe("Today I Learned", () => {
   it("Visits the page", () => {
     cy.visit("http://localhost:3000");
     cy.contains("Today I Learned");
@@ -9,7 +9,7 @@ describe("React Client", () => {
     cy.get("#body").type("Testing with Cypress is fun.");
     cy.get("input[type='submit']").click();
 
-    cy.wait(250);
+    cy.wait(100);
 
     cy.get(".Entry-title").contains("Testing");
     cy.get(".Entry-author").contains("Cypress");
@@ -22,15 +22,20 @@ describe("React Client", () => {
     cy.get("#author").should("be.empty");
     cy.get("#body").should("be.empty");
   });
-
-  it("Prevents empty title updates", () => {
+  it("Edit renders the Entry as a form", () => {
     cy.get("#edit").click();
+    cy.get("#title").should("have.value", "Testing");
+  });
+  it("Prevents empty title updates", () => {
     cy.get("#title").clear();
     cy.get("input[type='submit']").click();
     cy.get(".status").contains("Entry must have a title");
   });
   it("Cancel returns entry to original state", () => {
     cy.get("#cancel").click();
+
+    cy.wait(100);
+
     cy.get(".Entry-title").contains("Testing");
   });
   it("Edits the entry", () => {
@@ -39,7 +44,7 @@ describe("React Client", () => {
     cy.get("#title").type("Edit");
     cy.get("input[type='submit']").click();
 
-    cy.wait(250);
+    cy.wait(100);
 
     cy.get(".Entry-title").contains("Edit");
   });
@@ -50,5 +55,6 @@ describe("React Client", () => {
     cy.get(".Entry-title").should("not.contain", "Testing");
     cy.get(".Entry-author").should("not.contain", "Cypress");
     cy.get(".Entry-body").should("not.contain", "Testing with Cypress is fun.");
+    cy.get(".status").contains("Entry deleted");
   });
 });

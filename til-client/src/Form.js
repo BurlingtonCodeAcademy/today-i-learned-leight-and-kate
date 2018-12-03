@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "./App.css";
 
 const Form = props => (
@@ -42,5 +43,17 @@ const Form = props => (
     )}
   </>
 );
+
+Form.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  buttonText: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
+  _id: PropTypes.string,
+  renderEntry: PropTypes.func,
+  when: PropTypes.string
+};
 
 export default Form;
